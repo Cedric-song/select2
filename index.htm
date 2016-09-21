@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>    
+    <script src="https://cdn.bootcss.com/jquery/2.2.2/jquery.js"></script>
+    <script src="scripts/select2.min.js"></script>
+    <script src="scripts/zh-CN.js"></script>
+    <link rel="stylesheet" href="styles/select2.min.css">
+    <!-- <link rel="stylesheet" href="styles/select2-bootstrap.min.css"> -->
+    <style>
+      select{
+        font-size: 12px;
+      }
+      .select2.select2-container.select2-container--default{
+        width:auto !important;
+      }
+    </style>
+</head>
+<body>
+<script type="text/javascript">
+$(function(){
+  $( "#province" ).select2({
+    // theme: "bootstrap"
+  });
+  $( "#city" ).select2({
+    // theme: "bootstrap"
+  });
+  $( "#district" ).select2({
+    // theme: "bootstrap"
+  });
+
+
+var activeSelect = function (id){
+var selectorId = "#" + id + " select"
+var allSelector = $(selectorId)
+  // console.log(allSelector)
+  var len = allSelector.length
+  for(var i=0;i<len;i++){
+    // debugger
+
+    var $item = $(allSelector[i])
+
+    //  add attribute "pg-level" 
+    $item.attr({
+      "pg-level":i.toString(),
+      "pg-name":id + "-select-" + i,
+      "id":id + "-select-" + i
+    })
+    
+    $item.select2()
+    // bind input event
+    
+    $item.on("change",function(){
+      changeSelect.call(this)
+    })
+
+
+  }
+
+  // get select length
+  this.selectLength = function (){
+    return $(this).parent().find("select").length
+  }
+
+
+  this.changeSelect = function (){
+    console.log('changeSelect')
+    // debugger
+    var _value = this.value.toString()
+    var $this = $(this)
+    $this.attr("data-status","active")
+    var _level = parseInt($this.attr("pg-level")) + 1
+    if( _value !== "0" && _level < selectLength.call(this) ){
+      initData.call(this)
+    }
+  }
+  
+
+  this.initData = function (){
+    console.log("initData")
+    // debugger
+    var exId = this.id
+    var nextItem = nextSelect(exId)
+    initSelect2(nextItem)
+  }
+
+  this.nextSelect = function (id){
+
+    var _arr = id.split("-")
+    _arr.splice(2,1,parseInt(_arr[2])+1) 
+
+    console.log(_arr.join("-"))
+    return _arr.join("-")
+  }
+
+  this.initSelect2 = function(id){
+    var _id = "#" + id 
+    var data = [{ id: 0, text: 'enhancement' }, { id: 1, text: 'bug' }, { id: 2, text: 'duplicate' }, { id: 3, text: 'invalid' }, { id: 4, text: 'wontfix' }];
+    console.log(1233)
+    // $(_id).select2('destroy')
+    $(_id).select2({
+      data:data
+    });
+
+  }
+  
+  // this.prototype.initData = function(){
+  //   debugger
+  // }
+}
+activeSelect("demo")
+
+})
+  
+
+
+  // for all 
+  // $.fn.select2.defaults.set( "theme", "bootstrap" );
+</script>
+
+<div id="demo">
+  <select>
+    <option value="0">--请选择--</option>
+    <option value="1">香蕉</option>
+  </select>
+  <select>
+    <option value="0">--请选择--</option>
+  </select>
+  <select>
+    <option value="0">--请选择--</option>
+  </select>
+</div>
+
+
+
+</body>
+</html>
